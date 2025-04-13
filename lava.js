@@ -1,8 +1,9 @@
 const canvas = document.getElementById('lava');
 const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
 
 const circles = [];
 
@@ -28,6 +29,9 @@ function draw() {
 
 
         ctx.fillStyle = gradient;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "rgba(255, 0, 150, 0.7)";
+
         ctx.beginPath();
         ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
         ctx.fill();
@@ -41,10 +45,15 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
+function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // сброс трансформации
+    ctx.scale(dpr, dpr);
+}
+
 
 draw();
 
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
+
