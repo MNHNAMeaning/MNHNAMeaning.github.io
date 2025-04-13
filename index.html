@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.lava.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Моё портфолио</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div id="vanta-bg">
+  <canvas id="lava"></canvas>
+
+  <div class="content">
     <header>
       <h1>Привет, я [Твоё имя]</h1>
       <p>Начинающий веб-разработчик</p>
@@ -40,21 +38,7 @@
       <p>© 2025 [Твоё имя]</p>
     </footer>
   </div>
-  <script>
-    VANTA.LAVA({
-      el: "#vanta-bg",
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1.00,
-      scaleMobile: 1.00,
-      color1: 0xff0080,
-      color2: 0x8000ff,
-      backgroundColor: 0x000000
-    });
-  </script>
-</body>
 
+  <script src="lava.js"></script>
+</body>
 </html>
