@@ -1,38 +1,60 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.lava.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Моё портфолио</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <h1>Привет, я [Твоё имя]</h1>
-    <p>Начинающий веб-разработчик</p>
-  </header>
+  <div id="vanta-bg">
+    <header>
+      <h1>Привет, я [Твоё имя]</h1>
+      <p>Начинающий веб-разработчик</p>
+    </header>
 
-  <main>
-    <section>
-      <h2>Обо мне</h2>
-      <p>Я учусь создавать сайты и хочу развиваться в веб-разработке.</p>
-    </section>
+    <main>
+      <section>
+        <h2>Обо мне</h2>
+        <p>Я учусь создавать сайты и хочу развиваться в веб-разработке.</p>
+      </section>
 
-    <section>
-      <h2>Проекты</h2>
-      <ul>
-        <li>Название проекта — <a href="#">ссылка на GitHub</a></li>
-      </ul>
-    </section>
+      <section>
+        <h2>Проекты</h2>
+        <ul>
+          <li>Название проекта — <a href="#">ссылка на GitHub</a></li>
+        </ul>
+      </section>
 
-    <section>
-      <h2>Контакты</h2>
-      <p>Email: твой@email.com</p>
-    </section>
-  </main>
+      <section>
+        <h2>Контакты</h2>
+        <p>Email: твой@email.com</p>
+      </section>
+    </main>
 
-  <footer>
-    <p>© 2025 [Твоё имя]</p>
-  </footer>
+    <footer>
+      <p>© 2025 [Твоё имя]</p>
+    </footer>
+  </div>
+  <script>
+    VANTA.LAVA({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color1: 0xff0080,
+      color2: 0x8000ff,
+      backgroundColor: 0x000000
+    });
+  </script>
 </body>
+
 </html>
