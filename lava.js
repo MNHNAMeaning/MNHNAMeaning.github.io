@@ -25,7 +25,9 @@ function draw() {
     for (let c of circles) {
         const gradient = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r);
         gradient.addColorStop(0, 'rgba(255, 0, 102, 0.8)');
-        gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0)');
+        gradient.addColorStop(0.5, 'rgba(9, 255, 0, 0.8)');
+        gradient.addColorStop(0.8, 'rgba(0, 26, 255, 0.8)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
 
         ctx.fillStyle = gradient;
