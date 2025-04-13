@@ -18,6 +18,31 @@ for (let i = 0; i < 30; i++) {
 }
 
 function draw() {
+    for (let i = 0; i < circles.length; i++) {
+        let a = circles[i];
+        for (let j = i + 1; j < circles.length; j++) {
+            let b = circles[j];
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let dist = Math.hypot(dx, dy);
+            let minDist = a.r + b.r;
+
+            if (dist < minDist) {
+                let angle = Math.atan2(dy, dx);
+                let overlap = (minDist - dist) / 2;
+
+                // Применим мягкое отталкивание
+                let fx = Math.cos(angle) * overlap;
+                let fy = Math.sin(angle) * overlap;
+
+                a.x -= fx;
+                a.y -= fy;
+                b.x += fx;
+                b.y += fy;
+            }
+        }
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.globalCompositeOperation = 'lighter';
@@ -60,6 +85,6 @@ draw();
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  });
+});
 
 
