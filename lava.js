@@ -1,8 +1,8 @@
 const canvas = document.getElementById('lava');
 const ctx = canvas.getContext('2d');
 
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 
 const circles = [];
@@ -57,5 +57,9 @@ function resizeCanvas() {
 
 
 draw();
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
 
 
