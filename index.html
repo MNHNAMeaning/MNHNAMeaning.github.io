@@ -1,44 +1,15 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Моё портфолио</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Metaballs WebGL</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="lava"></canvas>
-
-  <div class="content">
-    <header>
-      <h1>Привет, я 05</h1>
-      <p>Начинающий веб-разработчик</p>
-    </header>
-
-    <main>
-      <section>
-        <h2>Обо мне</h2>
-        <p>Я учусь создавать сайты и хочу развиваться в веб-разработке.</p>
-      </section>
-
-      <section>
-        <h2>Проекты</h2>
-        <ul>
-          <li>Название проекта — <a href="#">ссылка на GitHub</a></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Контакты</h2>
-        <p>Email: твой@email.com</p>
-      </section>
-    </main>
-
-    <footer>
-      <p>© 2025 [Твоё имя]</p>
-    </footer>
-  </div>
-
-  <script src="lava.js"></script>
+  <canvas id="glcanvas"></canvas>
+  <canvas id="background"></canvas>
+  <div id="fps">FPS: --</div>
+  <script src="metaballs-webgl.js"></script>
+  <script src="background.js"></script>
 </body>
 </html>
