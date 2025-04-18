@@ -13,7 +13,6 @@ function drawLiquidBackground() {
         bg.width, bg.height
     );
 
-    // Волнообразные цвета
     let r = Math.floor(100 + 50 * Math.sin(t * 0.002));
     let g = Math.floor(40 + 40 * Math.sin(t * 0.003 + 2));
     let b = Math.floor(100 + 100 * Math.sin(t * 0.004 + 1));

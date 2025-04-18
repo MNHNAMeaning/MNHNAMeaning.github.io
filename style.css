@@ -75,3 +75,44 @@ body {
 #resume a:hover {
     text-decoration: underline;
 }
+
+.project {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.project-header {
+    padding: 8px 0;
+    font-weight: bold;
+    color: #ff5e00;
+}
+
+.project-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    padding-left: 10px;
+}
+
+.project.open .project-details {
+    max-height: 500px;
+    /* Достаточно большое значение */
+    opacity: 1;
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: #2e2e2e;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.download-btn:hover {
+    background: #5a5a5a;
+}

@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Metaballs WebGL</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <canvas id="glcanvas"></canvas>
   <canvas id="background"></canvas>
   <div id="fps">FPS: --</div>
   <div id="resume">
     <h1>Альберт Акатьев</h1>
-    <h2>Frontend Developer / WebGL Enthusiast</h2>
-    <p>Создаю интерактивные и визуально привлекательные веб-интерфейсы с использованием WebGL, Canvas и JavaScript.</p>
-    
+    <h2>Студент МГТУ им. Г.И.Носова / Начинающий разработчик видеоигр</h2>
+    <p>Люблю играть в компьютер...</p>
+
     <h3>Навыки</h3>
     <ul>
-      <li>JavaScript / HTML / CSS</li>
-      <li>WebGL / GLSL / Canvas</li>
-      <li>UI/UX дизайн</li>
-      <li>Git, GitHub</li>
+      <li>C# / Verse</li>
+      <li>Unity / UEFN</li>
+      <li>Геймдизайн</li>
+      <li>Английский язык B1</li>
     </ul>
 
     <h3>Проекты</h3>
-    <ul>
-      <li>Metaballs WebGL Visualization — <a href="#">Ссылка</a></li>
-      <li>Интерактивный UI-прототип — <a href="#">Ссылка</a></li>
-    </ul>
-
+    <div class="project">
+      <div class="project-header">Совсем не сон</div>
+      <div class="project-details">
+        <p>Я сделал уровень с лабиринтом, исправил незначительные баги в проекте, смонтировал трейлер</p>
+        <p><a href="https://drive.google.com/file/d/1hN-iUZ7u6Bg3kL7OwFBBuymmP7b_tiBm/view?usp=drive_link">Трейлер</a>
+        </p>
+      </div>
+    </div>
     <h3>Контакты</h3>
     <ul>
-      <li>Email: ivan@example.com</li>
-      <li>GitHub: <a href="https://github.com/yourhandle" target="_blank">yourhandle</a></li>
+      <li><a href="mailto:albertakatiev@gmail.com">albertakatiev@gmail.com</a></li>
     </ul>
+    <h3><a href="resume.pdf" class="download-btn">📄 Скачать резюме (PDF)</a></h3>
   </div>
   <script src="metaballs-webgl.js"></script>
   <script src="background.js"></script>
+  <script>
+    document.querySelectorAll('.project-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const project = header.parentElement;
+        project.classList.toggle('open');
+      });
+    });
+  </script>
 </body>
+
 </html>
