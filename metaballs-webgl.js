@@ -14,12 +14,35 @@ void main() {
 
 // GLSL fragment shader
 const fragmentShaderSource = `
-precision mediump float;
+precision highp float;
 #define MAX_BALLS 32
 
+uniform vec2 u_mouse;
 uniform vec2 u_resolution;
 uniform int u_numBalls;
-uniform vec3 u_balls[MAX_BALLS]; // x, y, radius
+uniform vec4 u_balls[MAX_BALLS]; // x, y, r, temperature
+//рандом
+float hash(vec2 p) {
+    return fract(sin(dot(p ,vec2(127.1, 311.7))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+
+    // 4 угла
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+
+    // Интерполяция
+    vec2 u = f * f * (3.0 - 2.0 * f);
+
+    return mix(a, b, u.x) +
+           (c - a)* u.y * (1.0 - u.x) +
+           (d - b) * u.x * u.y;
+}
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
@@ -27,25 +50,45 @@ void main() {
   float y = u_resolution.y - gl_FragCoord.y; // Flip Y
 
   float sum = 0.0;
+  float maxTemp = 0.0;
+
   for (int i = 0; i < MAX_BALLS; i++) {
     if (i >= u_numBalls) break;
-    vec3 ball = u_balls[i];
+    vec4 ball = u_balls[i];
     float dx = x - ball.x;
     float dy = y - ball.y;
     float dist = dx * dx + dy * dy;
-    sum += (ball.z * ball.z) / dist;
+    float influence = (ball.z * ball.z) / dist;
+
+    sum += influence;
+    maxTemp = max(maxTemp, ball.w * influence); // взвешенная температура
   }
 
   if (sum > 1.0) {
-  float intensity = clamp((sum - 1.0) * 0.5, 0.0, 1.0); 
-  vec3 baseColor = vec3(1.0, 0.0, 0.6); // Розовый
+    
+    
+    float intensity = clamp((sum - 1.0) * 0.5, 0.0, 1.0); 
+  vec3 baseColor = vec3(1.0, 0.5, 0.0); // Розовый
   vec3 color = mix(vec3(0.2), baseColor, intensity);
-  gl_FragColor = vec4(color, 1.0);
-} else {
-  gl_FragColor = vec4(0.0);
-}
+
+    // Координаты для шума  
+vec2 noiseUV = gl_FragCoord.xy * 0.02; // чем меньше коэффициент, тем крупнее шум
+float n = noise(noiseUV + vec2(sum * 0.3)); // поле влияет на сдвиг
+
+// Добавление шума к цвету
+color += 0.1 * n;
+
+    gl_FragColor = vec4(color, 1.0);
+  } else {
+    gl_FragColor = vec4(0.0);
+  }
     
 }`;
+// Цвет в зависимости от температуры:
+// холод: синий, тепло: розово-оранжевый
+// vec3 coldColor = vec3(0.2, 0.4, 1.0);
+//     vec3 hotColor = vec3(1.0, 0.2, 0.5);
+//     vec3 color = mix(coldColor, hotColor, maxTemp);
 
 function createShader(gl, type, source) {
     const shader = gl.createShader(type);
@@ -76,6 +119,14 @@ const positionLocation = gl.getAttribLocation(program, "a_position");
 const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 const ballsLocation = gl.getUniformLocation(program, "u_balls");
 const numBallsLocation = gl.getUniformLocation(program, "u_numBalls");
+
+const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+let mouse = [0, 0];
+
+canvas.addEventListener("mousemove", (e) => {
+    mouse[0] = e.clientX;
+    mouse[1] = e.clientY;
+});
 
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -110,11 +161,12 @@ for (let i = 0; i < NUM_BALLS; i++) {
 
 function render() {
     for (let b of balls) {
+
         const mass = b.mass;
 
         // Температура
         if (b.y > canvas.height * 0.8) {
-            b.temperature += b.heatRate * 0.5;  
+            b.temperature += b.heatRate * 0.5;
         } else if (b.y < canvas.height * 0.2) {
             b.temperature -= b.heatRate * 0.5;
         }
@@ -124,8 +176,7 @@ function render() {
         const buoyancy = (b.temperature - 0.5) * 2;
         const gravity = 0.05;
 
-        // Теперь силы будут видимыми, но эффект — более реалистичный:
-        b.vy -= (buoyancy * 0.2) / mass;  // раньше было 0.05
+        b.vy -= (buoyancy * 0.2) / mass;
         b.vy += (gravity * 1.5) / mass;
 
 
@@ -138,6 +189,17 @@ function render() {
         const maxSpeed = 1.5;
         b.vx = Math.max(-maxSpeed, Math.min(maxSpeed, b.vx));
         b.vy = Math.max(-maxSpeed, Math.min(maxSpeed, b.vy));
+        let dx = b.x - mouse[0];
+        let dy = b.y - mouse[1];
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        let minDist = b.r * 1.5;
+
+        if (dist < minDist && dist > 0.01) {
+            let force = (1.0 - dist / minDist) * 1.5;
+            let angle = Math.atan2(dy, dx);
+            b.vx += Math.cos(angle) * force / b.mass;
+            b.vy += Math.sin(angle) * force / b.mass;
+        }
 
         // Движение
         b.x += b.vx;
@@ -241,18 +303,15 @@ function render() {
 
     const data = [];
     for (let b of balls) {
-        data.push(b.x, b.y, b.r);
+        data.push(b.x, b.y, b.r, b.temperature);
     }
-
+    gl.uniform4fv(ballsLocation, new Float32Array(data));
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
     gl.uniform1i(numBallsLocation, balls.length);
-    gl.uniform3fv(ballsLocation, new Float32Array(data));
+    gl.uniform2f(mouseLocation, mouse[0], mouse[1]);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-
-
     updateFPS();
     requestAnimationFrame(render);
 }
